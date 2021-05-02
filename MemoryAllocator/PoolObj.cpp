@@ -14,6 +14,7 @@ PoolObj::PoolObj()
 	numFreeBlocks = 0;
 	numInitialized = 0;
 	memStart = nullptr;
+	std::cout << &memStart;
 	next = 0;
 }
 void PoolObj::DestroyPool()
@@ -47,16 +48,16 @@ void* PoolObj::Allocate()
 }
 void PoolObj::deAllocate(void* p)
 {
-	if (next != nullptr)
+	if (next == nullptr)
 	{
+
 		*(int*)p = indexFromAddr(next);
 		next = (char*)p;
+		++numFreeBlocks;
+		return;
 	}
-	else
-	{
 		*(int*)p = indexFromAddr(next);
 		next = (char*)p;
-	}
 	++numFreeBlocks;
 }
 PoolObj::~PoolObj()
